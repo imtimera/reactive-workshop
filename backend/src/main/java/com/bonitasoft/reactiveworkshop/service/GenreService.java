@@ -52,14 +52,8 @@ public class GenreService {
         String artistId = artist.getId();
         final Flux<String> commentsFlux = this.webClient.get()
                 .uri("/comments/{artistId}/stream", artistId)
-                .exchangeToFlux(response -> {
-                    if (response.statusCode().is2xxSuccessful()) {
-                        return response.bodyToFlux(String.class);
-                    }
-                    return Flux.error(new IllegalStateException("Body has not been written yet"));
-                });
-
-        //.bodyToFlux(String.class);
+                .retrieve()
+                .bodyToFlux(String.class);
 
         return commentsFlux;
     }
